@@ -1,9 +1,26 @@
 let abi = [{
-        "inputs": [
-
-        ],
+        "inputs": [{
+            "internalType": "uint64",
+            "name": "subscriptionId",
+            "type": "uint64"
+        }],
         "stateMutability": "nonpayable",
         "type": "constructor"
+    },
+    {
+        "inputs": [{
+                "internalType": "address",
+                "name": "have",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "want",
+                "type": "address"
+            }
+        ],
+        "name": "OnlyCoordinatorCanFulfill",
+        "type": "error"
     },
     {
         "anonymous": false,
@@ -28,13 +45,31 @@ let abi = [{
         "inputs": [{
                 "indexed": true,
                 "internalType": "address",
-                "name": "previousOwner",
+                "name": "from",
                 "type": "address"
             },
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "newOwner",
+                "name": "to",
+                "type": "address"
+            }
+        ],
+        "name": "OwnershipTransferRequested",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [{
+                "indexed": true,
+                "internalType": "address",
+                "name": "from",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "to",
                 "type": "address"
             }
         ],
@@ -50,6 +85,28 @@ let abi = [{
             "type": "address"
         }],
         "name": "Paused",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [{
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "randomNumber",
+            "type": "uint256"
+        }],
+        "name": "RandomNumberFulfilled",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [{
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "requestId",
+            "type": "uint256"
+        }],
+        "name": "RandomNumberRequested",
         "type": "event"
     },
     {
@@ -80,6 +137,13 @@ let abi = [{
         ],
         "name": "Winner",
         "type": "event"
+    },
+    {
+        "inputs": [],
+        "name": "acceptOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
     },
     {
         "inputs": [{
@@ -118,9 +182,7 @@ let abi = [{
         "type": "function"
     },
     {
-        "inputs": [
-
-        ],
+        "inputs": [],
         "name": "lastWinner",
         "outputs": [{
             "internalType": "address",
@@ -131,9 +193,7 @@ let abi = [{
         "type": "function"
     },
     {
-        "inputs": [
-
-        ],
+        "inputs": [],
         "name": "lotteryId",
         "outputs": [{
             "internalType": "uint256",
@@ -144,9 +204,7 @@ let abi = [{
         "type": "function"
     },
     {
-        "inputs": [
-
-        ],
+        "inputs": [],
         "name": "owner",
         "outputs": [{
             "internalType": "address",
@@ -157,9 +215,18 @@ let abi = [{
         "type": "function"
     },
     {
-        "inputs": [
-
-        ],
+        "inputs": [],
+        "name": "ownerPayable",
+        "outputs": [{
+            "internalType": "address payable",
+            "name": "",
+            "type": "address"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "participantCount",
         "outputs": [{
             "internalType": "uint256",
@@ -170,31 +237,21 @@ let abi = [{
         "type": "function"
     },
     {
-        "inputs": [
-
-        ],
+        "inputs": [],
         "name": "participate",
-        "outputs": [
-
-        ],
+        "outputs": [],
         "stateMutability": "payable",
         "type": "function"
     },
     {
-        "inputs": [
-
-        ],
+        "inputs": [],
         "name": "pause",
-        "outputs": [
-
-        ],
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
-        "inputs": [
-
-        ],
+        "inputs": [],
         "name": "paused",
         "outputs": [{
             "internalType": "bool",
@@ -205,37 +262,76 @@ let abi = [{
         "type": "function"
     },
     {
-        "inputs": [
-
+        "inputs": [],
+        "name": "randomResult",
+        "outputs": [{
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+        }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+                "internalType": "uint256",
+                "name": "requestId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "randomWords",
+                "type": "uint256[]"
+            }
         ],
+        "name": "rawFulfillRandomWords",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+        }],
+        "name": "s_requests",
+        "outputs": [{
+                "internalType": "bool",
+                "name": "fulfilled",
+                "type": "bool"
+            },
+            {
+                "internalType": "uint256",
+                "name": "randomNumber",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "selectWinner",
-        "outputs": [
-
-        ],
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
         "inputs": [{
             "internalType": "address",
-            "name": "newOwner",
+            "name": "to",
             "type": "address"
         }],
         "name": "transferOwnership",
-        "outputs": [
-
-        ],
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
-        "inputs": [
-
-        ],
+        "inputs": [],
         "name": "unpause",
-        "outputs": [
-
-        ],
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     }

@@ -1,21 +1,28 @@
 import { Box, Button, Center, Flex, useToast } from "@chakra-ui/react"
-import { participate, drawLottery, fetchLotteryStat, extractParticipating} from "../web3/Function";
+import { participate, drawLottery, fetchLotteryStat, extractParticipating, getOwnerAddr} from "../web3/Function";
 import { useState, useEffect } from "react";
 import { useWalletContext } from "../context/WalletContext";
 import { WalletConnect } from "../components/WalletConnect";
-import { owner } from "../web3/ContractAddr";
 import { ParticipantsTable } from "../components/ParticipantTable";
 import io from 'socket.io-client';
-const socket = io('http://localhost:3001');
+const socket = io('http://lottery-api.dyfault.com');
 
 export const Home = () => {
 
-    const { isConnected, address } = useWalletContext();
+    const { isConnected, address, owner, setOwner } = useWalletContext();
     const [loading, setLoading] = useState(false);
     const [loadingData, setLoadingData] = useState(false);
     const [lotteryStats, setLotteryStats] = useState({});
     const toast = useToast();
-    const [winnerInfo, setWinnerInfo] = useState({});
+
+    useEffect(() => {
+        async function fetchOwner() {
+            const owner = await getOwnerAddr();
+            setOwner(owner);
+        }
+
+        fetchOwner();
+    }, [address])
 
     useEffect(() => {
 
@@ -47,7 +54,6 @@ export const Home = () => {
 
     useEffect(() => {
         socket.on('winnerInfo', (data) => {
-            setWinnerInfo(data);
 
             toast({
                 title: "New Winner",

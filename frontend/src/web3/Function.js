@@ -64,6 +64,22 @@ export async function fetchLotteryStat() {
     }
 }
 
+export async function getOwnerAddr() {
+    try {
+
+        let owner = await client.readContract({
+            address: lottery,
+            abi: ABI,
+            functionName: 'owner',
+        });
+
+        return owner;
+
+    } catch (err) {
+        console.error("Erreur lors de la récupération de tous les participants :", err);
+    }
+}
+
 export async function participate() {
     try {
 
@@ -107,7 +123,7 @@ export async function extractParticipating(hash) {
         for (let i = 0; i < logs.length; i++) {
             const log = logs[i]
 
-            if(log.address === "0xdfb9f7318ce6973766cc9e098d2e5d0cfbe31f65") {
+            if(log.address === lottery.toLowerCase()) {
                 const topics = decodeEventLog({
                     abi: ABI,
                     data: log.data,

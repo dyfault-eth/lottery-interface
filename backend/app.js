@@ -15,7 +15,7 @@ const io = new Server(server, {
 });
 
 const provider = new ethers.WebSocketProvider('wss://polygon-mumbai.g.alchemy.com/v2/Y1dXbX0bQGVW4kkmmWASXEqakJyW2UHm');
-const contractAddress = '0xdfB9F7318Ce6973766cC9E098d2E5D0CFBe31f65';
+const contractAddress = '0x6b0d05E25e2eC742D63C96bD9469714Df2Aaf3D0';
 const contract = new ethers.Contract(contractAddress, contractABI, provider);
 
 contract.on('Winner', (winner) => {

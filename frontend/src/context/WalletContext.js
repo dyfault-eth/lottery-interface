@@ -7,7 +7,8 @@ export const WalletProvider = ({ children }) => {
 
   const [ address, setAddress ] = useState('');
   const [ isConnected, setIsConnected ] = useState(false);
-  const [maticBal, setMaticBal] = useState(0)
+  const [maticBal, setMaticBal] = useState(0);
+  const [owner, setOwner] = useState('');
 
   return (
     <WalletContext.Provider
@@ -21,6 +22,9 @@ export const WalletProvider = ({ children }) => {
 
         maticBal,
         setMaticBal,
+
+        owner,
+        setOwner,
       }}
     >
       {children}
